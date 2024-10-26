@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criação de Conta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        /* Barra de progresso com borda cortada */
+        .progress-bar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+        }
+        .back-icon {
+            font-size: 36px; /* Tamanho do ícone de voltar */
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e0e0e0;
+            position: relative;
+            border-radius: 5px; /* Bordas arredondadas */
+            overflow: hidden; /* Para o efeito não ultrapassar a área da barra */
+        }
+        .progress {
+            width: 75%; /* Aumentado para 75% */
+            height: 100%;
+            background-color: #000;
+            position: relative;
+            clip-path: polygon(0% 0%, 95% 0%, 100% 30%, 95% 100%, 0% 100%); /* Efeito de borda cortada */
+        }
+
+        /* Título e texto */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Inputs de data de nascimento */
+        .input-data {
+            width: 25%;
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-bottom: 2px solid #e0e0e0;
+            outline: none;
+            text-align: center;
+            color: #999;
+            margin: 10px 5px; /* Ajustando margem */
+        }
+        .input-data:focus {
+            border-bottom: 2px solid #000;
+        }
+
+        /* Mensagem de erro */
+        .error-message {
+            color: red;
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none; /* Oculta a mensagem de erro por padrão */
+        }
+
+        /* Botão */
+        .btn-continuar {
+            width: 80%;
+            padding: 10px;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0px 4px 10px rgba(128, 0, 128, 0.6); /* Sombra roxa */
+            cursor: pointer; /* Mudando o cursor para indicar que é clicável */
+        }
+        .btn-continuar:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Colocar o botão fixo na parte de baixo */
+        .bottom-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de progresso e ícone de voltar no topo -->
+    <div class="progress-bar-container">
+        <span class="back-icon">&larr;</span> <!-- Ícone de voltar maior -->
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+    </div>
+
+    <!-- Conteúdo centralizado -->
+    <div class="container">
+        <h1>Qual é a sua data de nascimento?</h1>
+        <p>Preencha os campos abaixo ;)</p>
+
+        <!-- Campos de data de nascimento -->
+        <div style="display: flex; justify-content: center;">
+            <input type="number" id="dia" class="input-data" placeholder="Dia" min="1" max="31" required>
+            <input type="number" id="mes" class="input-data" placeholder="Mês" min="1" max="12" required>
+            <input type="number" id="ano" class="input-data" placeholder="Ano" min="1900" max="2023" required>
+        </div>
+
+        <!-- Mensagem de erro -->
+        <div id="error-message" class="error-message">Todos os campos são obrigatórios.</div>
+    </div>
+
+    <!-- Botão continuar -->
+    <div class="bottom-container">
+        <div class="btn-continuar" onclick="validarData()">continuar</div>
+    </div>
+
+    <script>
+        function validarData() {
+            var dia = document.getElementById("dia").value;
+            var mes = document.getElementById("mes").value;
+            var ano = document.getElementById("ano").value;
+            var errorMessage = document.getElementById("error-message");
+
+            // Verifica se todos os campos de data estão preenchidos
+            if (dia === "" || mes === "" || ano === "") {
+                errorMessage.style.display = "block"; // Mostra a mensagem de erro
+            } else {
+                errorMessage.style.display = "none";  // Oculta a mensagem de erro
+                // Redireciona para outra página, troque 'doc.html' pelo seu URL
+                window.location.href = 'doc.html'; // Redirecionar para a página desejada
+            }
+        }
+    </script>
+</body>
+</html>

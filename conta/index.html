@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página com Vídeo e Carrossel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        /* Tela de carregamento com vídeo em tela cheia */
+        #loading-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+        }
+        #loading-screen video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Carrossel de fotos em tela cheia */
+        #carousel-container {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1s ease;
+        }
+        .carousel-slide:not(.active) {
+            opacity: 0;
+        }
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        /* Mensagem perto dos botões */
+        #message {
+            position: absolute;
+            bottom: 320px; /* Mensagem um pouco mais alta */
+            left: 20px;
+            color: white;
+            font-size: 32px; /* Mensagem maior */
+            font-family: Arial, sans-serif;
+            line-height: 1.2; /* Espaçamento entre linhas */
+            max-width: 250px; /* Largura máxima da mensagem */
+        }
+
+        /* Indicadores abaixo da mensagem */
+        #indicators {
+            position: absolute;
+            bottom: 290px; /* Ajustado para estar junto com a mensagem */
+            left: 20px;
+            display: flex;
+            gap: 5px; /* Espaçamento entre os indicadores */
+        }
+
+        .indicator {
+            width: 30px;
+            height: 10px;
+            border: 2px solid white; /* Contorno branco */
+            border-radius: 5px; /* Bordas arredondadas */
+            background-color: transparent; /* Fundo transparente */
+        }
+
+        .indicator.active {
+            background-color: white; /* Indicador ativo fica todo branco */
+        }
+
+        /* Botão Criar Conta */
+        #button-container {
+            position: absolute;
+            bottom: 50px; /* Botões mais para baixo */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .button {
+            font-family: Arial, sans-serif;
+            font-size: 20px; /* Aumentado para texto maior */
+            color: black;
+            background-color: white;
+            border: none;
+            padding: 15px 180px; /* Aumentado para os lados */
+            border-radius: 10px; /* Cantos suavizados */
+            cursor: pointer;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            margin-bottom: 20px; /* Espaço entre os botões */
+            z-index: 1;
+            box-shadow: 5px 5px 0px rgba(160, 97, 252, 1); /* Sombra roxa deslocada */
+        }
+
+        .button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Botão de "Entrar na Minha Conta" */
+        .login-link {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: white; /* Cor branca */
+            text-decoration: none;
+            border-bottom: 1px solid white;
+            padding-bottom: 3px;
+            margin-top: 25px; /* Ajustado para mais espaço */
+        }
+
+        .login-link:hover {
+            color: #a061fc;
+            border-bottom: 1px solid #a061fc;
+        }
+
+        /* Ajuste responsivo */
+        @media (max-width: 768px) {
+            .carousel-slide {
+                background-size: cover;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tela de carregamento com vídeo -->
+    <div id="loading-screen">
+        <video id="intro-video" autoplay muted>
+            <source src="img/1.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos HTML5.
+        </video>
+    </div>
+
+    <!-- Carrossel de fotos como fundo da página -->
+    <div id="carousel-container">
+        <div class="carousel-slide active" style="background-image: url('img/1.jpg');"></div>
+        <div class="carousel-slide" style="background-image: url('img/2.jpg');"></div>
+        <div class="carousel-slide" style="background-image: url('img/3.jpg');"></div>
+    </div>
+
+    <!-- Mensagem dinâmica perto dos botões -->
+    <div id="message">Mesada<br>automotizada!</div>
+
+    <!-- Indicadores -->
+    <div id="indicators">
+        <div class="indicator active"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+    </div>
+
+    <!-- Botões Criar Conta e Entrar na Minha Conta -->
+    <div id="button-container">
+        <a href="email.html" class="button">criar conta</a>
+        <a href="#" class="login-link">entrar na minha conta</a>
+    </div>
+
+    <script>
+        // Função para ocultar o vídeo após terminar e exibir o carrossel
+        var video = document.getElementById("intro-video");
+        var loadingScreen = document.getElementById("loading-screen");
+        var carouselContainer = document.getElementById("carousel-container");
+        var message = document.getElementById("message");
+        var indicators = document.querySelectorAll('.indicator');
+
+        video.onended = function() {
+            loadingScreen.style.display = "none";
+            carouselContainer.style.display = "block";
+        };
+
+        // Carrossel de imagens arrastável
+        var currentSlide = 0;
+        var slides = document.querySelectorAll('.carousel-slide');
+        var messages = [
+            "Mesada automotizada!",
+            "Manda um Pix ai.",
+            "Um app com a sua cara"
+        ];
+
+        // Função para exibir o slide atual e alterar a mensagem
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            message.innerHTML = messages[index].replace(/\\n/g, "<br>"); // Altera a mensagem conforme o slide
+            updateIndicators(index);
+        }
+
+        // Atualiza os indicadores
+        function updateIndicators(index) {
+            indicators.forEach((indicator, i) => {
+                indicator.classList.remove('active');
+                if (i < index + 1) {
+                    indicator.classList.add('active');
+                }
+            });
+        }
+
+        // Função para avançar o carrossel ao arrastar
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Implementa a funcionalidade de arrastar para trocar de slide
+        var startX;
+        carouselContainer.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+
+        carouselContainer.addEventListener('touchend', function(e) {
+            var endX = e.changedTouches[0].clientX;
+            if (startX > endX + 50) {
+                nextSlide();
+            } else if (startX < endX - 50) {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            }
+        });
+    </script>
+
+</body>
+</html>
